@@ -65,14 +65,15 @@ export async function listReservations(params, signal) {
   );
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
-    .then(formatReservationTime)
+    .then(formatReservationTime);
 }
 
 export async function addReservation(data, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
+  const body = { data };
   return await fetchJson(
     url,
-    { method: "POST", body: JSON.stringify(data), headers, signal },
+    { method: "POST", body: JSON.stringify(body), headers, signal },
     []
   );
 }
