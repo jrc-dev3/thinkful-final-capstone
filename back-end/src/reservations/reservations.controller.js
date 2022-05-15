@@ -30,7 +30,7 @@ async function list(req, res) {
   });
 }
 
-const add = async (req, res) => {
+const create = async (req, res) => {
   console.log("POST", req.url, req.body);
 
   const body = req.body;
@@ -43,5 +43,5 @@ const add = async (req, res) => {
 
 module.exports = {
   list : [validateQuery, asyncErrorBoundary(list)],
-  add,
+  create,
 };

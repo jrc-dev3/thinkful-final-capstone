@@ -9,6 +9,6 @@ const controller = require("./reservations.controller");
 
 router.route("/")
   .get(controller.list)
-  .post(controller.add)
+  .post(controller.create)
 
 module.exports = router;
