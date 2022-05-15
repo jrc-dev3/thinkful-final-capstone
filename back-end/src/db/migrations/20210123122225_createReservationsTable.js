@@ -4,8 +4,8 @@ exports.up = function (knex) {
     table.string("first_name")
     table.string("last_name")
     table.string("mobile_number")
-    table.string("reservation_date") // we will return _date and _timestamp from DATE type
-    table.string("reservation_time")
+    table.date("reservation_date") // we will return _date and _timestamp from DATE type
+    table.time("reservation_time")
     table.integer("people")
     table.timestamps(true, true);
   });
