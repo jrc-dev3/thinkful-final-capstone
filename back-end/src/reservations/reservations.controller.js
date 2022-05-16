@@ -79,10 +79,10 @@ const validateBody = (req, res, next) => {
 
     //if its Tuesday
     if (reservedDate.getDay() === 2)
-      next({ status: 400, message: "Closed on Tuesdays!" });
+      return next({ status: 400, message: "closed" });
     //if reservation is before today
     if (reservedDate.getTime() < today.getTime())
-      next({ status: 400, message: "Past date!" });
+      return next({ status: 400, message: "future" });
     //
 
     res.locals.body = body;
