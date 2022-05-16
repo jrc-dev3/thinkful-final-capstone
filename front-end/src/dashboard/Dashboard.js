@@ -64,7 +64,7 @@ function Dashboard() {
       </div>
       <ErrorAlert error={reservationsError} />
       <ReservationsList reservations={reservations} />
-      <TablesList tables={tables} />
+      <TablesList tables={tables} loadDashboard={loadDashboard} />
       {/* {JSON.stringify(reservations)} */}
 
       <button onClick={handleDays}>Next</button>

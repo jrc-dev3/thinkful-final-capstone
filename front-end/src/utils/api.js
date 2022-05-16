@@ -74,6 +74,8 @@ export async function listTables(signal) {
   return await fetchJson(url, { headers, signal }, []);
 }
 
+
+
 export async function readReservation(reservation_id, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
   return await fetchJson(url, { headers, signal }, [])
@@ -108,6 +110,15 @@ export async function addTable(data, signal) {
   return await fetchJson(
     url,
     { method: "POST", body: JSON.stringify(body), headers, signal },
+    []
+  );
+}
+
+export async function freeTable(table_id, signal = null) {
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  return await fetchJson(
+    url,
+    { method: "DELETE", headers, signal },
     []
   );
 }

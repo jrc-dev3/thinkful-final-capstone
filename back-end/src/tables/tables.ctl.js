@@ -2,7 +2,9 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const tablesSvc = require("./tables.svc");
 const resSvc = require("../reservations/reservations.svc");
 const hasProperties = require("../errors/hasProperties");
-const { validateReservationExists } = require("../reservations/reservations.ctl");
+const {
+  validateReservationExists,
+} = require("../reservations/reservations.ctl");
 
 const validateTableId = (req, res, next) => {
   const { table_id } = req.params;
@@ -20,14 +22,13 @@ const validateTableId = (req, res, next) => {
 
 const validateUpdateBody = (req, res, next) => {
   const body = req.body.data;
-  
+
   if (body) {
     const { reservation_id } = body;
     hasProperties(["reservation_id"], body, next, () => {
-
       if (!reservation_id && !reservation_id === null)
         return next({ status: 400, message: "reservation_id" });
-    })
+    });
 
     res.locals.reservation_id = reservation_id;
     return next();
@@ -126,9 +127,28 @@ const update = async (req, res) => {
   res.json({});
 };
 
+const destory = async (req, res, next) => {
+  const table_id = res.locals.table_id;
+  const table = await tablesSvc.read(table_id);
+
+  if (table && Object.keys(table)) {
+    const { reservation_id } = table;
+
+    if (reservation_id == null)
+      return next({ status: 400, message: "not occupied." });
+
+    await tablesSvc.delete(table_id);
+
+    res.status(200).json({});
+  }
+
+  next({ status: 404, message: `${table_id}` });
+};
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [validateBody, asyncErrorBoundary(create)],
+  delete: [validateTableId, destory],
   update: [
     validateTableId,
     validateUpdateBody,

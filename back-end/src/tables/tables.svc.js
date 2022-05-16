@@ -24,17 +24,23 @@ const create = (body) => {
 
 const update = (table_id, updateBody) => {
 
-  console.log('svc',table_id, updateBody)
-
   return knex(TABLE)
           .select("reservation_id")
           .where({table_id})
           .update(updateBody, "reservation_id")
 }
 
+const destroy = (table_id) => {
+  return knex(TABLE)
+          .select("reservation_id")
+          .where({table_id})
+          .update({reservation_id: null}, "reservation_id")
+}
+
 module.exports = {
   list,
   create,
   read,
-  update
+  update,
+  delete: destroy
 };

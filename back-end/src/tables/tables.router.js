@@ -9,6 +9,7 @@ const controller = require("./tables.ctl");
 
 router
   .route("/:table_id/seat")
+  .delete(controller.delete)
   .put(controller.update)
 
 router
