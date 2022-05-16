@@ -34,7 +34,6 @@ const validateBody = (req, res, next) => {
       if (bodyKeys.includes(requiredKey)) {
         if (!body[requiredKey])
           return next({ status: 400, message: `${requiredKey}` });
-          
 
         const value = body[requiredKey];
         switch (requiredKey) {
@@ -85,6 +84,12 @@ const validateBody = (req, res, next) => {
       return next({ status: 400, message: "future" });
     //
 
+    if (reservation_time < "10:30")
+      return next({ status: 400, message: "closed" });
+
+    if (reservation_time > "21:30")
+      return next({ status: 400, message: "closed" });
+
     res.locals.body = body;
     return next();
   }
@@ -111,11 +116,10 @@ async function list(req, res) {
 
 const create = async (req, res) => {
   console.log("POST", req.url, req.body);
-  
 
   const body = res.locals.body;
   const data = await resSvc.create(body);
-  console.log(data)
+  console.log(data);
 
   res.status(201).json({
     data,

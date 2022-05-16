@@ -19,7 +19,6 @@ const NewReservation = () => {
   const history = useHistory();
 
   const isValidForm = (form) => {
-
     const { reservation_date, reservation_time } = form;
 
     let today = new Date();
@@ -36,6 +35,16 @@ const NewReservation = () => {
 
     if (reservedDate.getTime() < today.getTime()) {
       setReservationsError(Error("We cannot serve you yesterday!"));
+      return false;
+    }
+
+    if (reservation_time < "10:30") {
+      setReservationsError("Too early!");
+      return false;
+    }
+
+    if (reservation_time > "21:30") {
+      setReservationsError("Too early!");
       return false;
     }
 
