@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
 import { addReservation } from "../utils/api";
-import { formatAsTime } from "../utils/date-time";
 
 const NewReservation = () => {
   const initialForm = {

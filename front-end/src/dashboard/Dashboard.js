@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { next, previous, today } from "../utils/date-time";
+import ReservationsList from "../reservations/ReservationsList";
+import TablesList from "../tables/TablesList";
 
 /**
  * Defines the dashboard page.
@@ -18,6 +20,7 @@ function Dashboard() {
 
   const [date, setDate] = useState(dateQuery? dateQuery: TODAY);
   const [reservations, setReservations] = useState([]);
+  const [tables, setTables] = useState([])
   const [reservationsError, setReservationsError] = useState(null);
 
   const handleDays = (e) => {
@@ -44,6 +47,12 @@ function Dashboard() {
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+
+    listTables(abortController.signal)
+      .then(setTables)
+      .catch(setReservationsError)
+      
+    
     return () => abortController.abort();
   }
 
@@ -54,7 +63,9 @@ function Dashboard() {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      <ReservationsList reservations={reservations} />
+      <TablesList tables={tables} />
+      {/* {JSON.stringify(reservations)} */}
 
       <button onClick={handleDays}>Next</button>
       <button onClick={handleDays}>Previous</button>
