@@ -12,6 +12,7 @@ const ReservationsList = ({ reservations }) => {
           people,
           reservation_date,
           reservation_time,
+          status
         }) => (
           <article key={reservation_id} style={{border: 'solid'}}>
             <p>{first_name}</p>
@@ -20,7 +21,8 @@ const ReservationsList = ({ reservations }) => {
             <p>{reservation_date}</p>
             <p>{reservation_time}</p>
             <p>{people}</p>
-            <a href={`/reservations/${reservation_id}/seat`}> <button>Seat</button></a>
+            <p data-reservation-id-status={reservation_id}>{status}</p>
+            { status === "booked" && <a href={`/reservations/${reservation_id}/seat`}> <button>Seat</button></a>}
           </article>
         )
       )}

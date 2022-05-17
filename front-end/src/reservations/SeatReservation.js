@@ -28,10 +28,13 @@ const SeatReservation = () => {
     }
 
     const data = { table_id, reservation_id: Number(reservation_id) };
+    const updatedBody = { status: "seated"}
     const abortController = new AbortController();
     seatReservation(data, abortController.signal)
       .then(() => history.push("/dashboard"))
       .catch(setReservationsError);
+
+    
 
     return () => abortController.abort();
   };

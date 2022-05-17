@@ -93,6 +93,15 @@ const validateBody = (req, res, next) => {
   });
 };
 
+const validateReservationStatus = async (req,res,next) => {
+  const {status} = res.locals.reservation
+
+  if(status === "seated") return next({status: 400, message: `${status}`})
+
+  next()
+
+}
+
 /**
  * List handler for tables resources
  */
@@ -137,7 +146,7 @@ const destory = async (req, res, next) => {
     if (reservation_id == null)
       return next({ status: 400, message: "not occupied." });
 
-    await tablesSvc.delete(table_id);
+    await tablesSvc.delete(table_id, reservation_id);
 
     res.status(200).json({});
   }
@@ -153,6 +162,7 @@ module.exports = {
     validateTableId,
     validateUpdateBody,
     asyncErrorBoundary(validateReservationExists),
+    validateReservationStatus,
     asyncErrorBoundary(validateTableExists),
     asyncErrorBoundary(validateTable),
     asyncErrorBoundary(update),
