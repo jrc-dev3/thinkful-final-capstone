@@ -1,6 +1,10 @@
 import React from "react";
 
 const ReservationsList = ({ reservations }) => {
+
+
+  if(typeof reservations === "string") return <h2>{reservations}</h2>
+
   return (
     <section>
       {reservations.map(

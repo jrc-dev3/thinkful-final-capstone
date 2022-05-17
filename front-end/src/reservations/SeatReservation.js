@@ -64,7 +64,7 @@ const SeatReservation = () => {
     return () => abortController.abort();
   }
   return (
-    <div>
+    <form>
       <ErrorAlert error={reservationsError} />
       <label htmlFor="tables">Table number: </label>
 
@@ -77,7 +77,7 @@ const SeatReservation = () => {
       </select>
       <button type="submit" onClick={handleSubmit}>Submit</button>
       <button onClick={() => history.goBack()}>Cancel</button>
-    </div>
+    </form>
   );
 };
 
