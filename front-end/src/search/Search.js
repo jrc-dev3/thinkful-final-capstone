@@ -12,12 +12,10 @@ const Search = () => {
     setMobileNumber(e.target.value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
+  const fetchResults = () => {
     const abortController = new AbortController();
     setReservationsError(null);
-    searchMobile({ mobile_number }, abortController.signal)
+    searchMobile(mobile_number, abortController.signal)
       .then(lst => {
         if(lst.length === 0) return "No reservations found"
 
@@ -25,6 +23,11 @@ const Search = () => {
       })
       .then(setResults)
       .catch(setReservationsError);
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    fetchResults()
   };
 
   return (
@@ -45,7 +48,7 @@ const Search = () => {
         Find
       </button>
 
-      <ReservationsList reservations={results} />
+      <ReservationsList reservations={results} refresh={fetchResults} />
     </form>
   );
 };

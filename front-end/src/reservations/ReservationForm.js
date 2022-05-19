@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
-import { addReservation } from "../utils/api";
+import {
+  addReservation,
+  readReservation,
+  updateReservation,
+} from "../utils/api";
 
-const NewReservation = () => {
+const ReservationForm = () => {
   const initialForm = {
     first_name: "",
     last_name: "",
@@ -15,7 +19,25 @@ const NewReservation = () => {
 
   const [formData, setFormData] = useState({ ...initialForm });
   const [reservationsError, setReservationsError] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
+  const { reservation_id } = useParams();
   const history = useHistory();
+
+  useEffect(() => {
+    const checkIfEdit = () => {
+
+      const abortController = new AbortController();
+      if (reservation_id) {
+        readReservation(reservation_id,abortController.signal)
+          .then(setFormData)
+          .then(() => setIsEdit(true));
+
+          return () => abortController.abort();
+      }
+    };
+
+    checkIfEdit();
+  }, [reservation_id]);
 
   const isValidForm = (form) => {
     const { reservation_date, reservation_time } = form;
@@ -53,15 +75,44 @@ const NewReservation = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    let body = { ...formData };
-    //body.reservation_time += ":00";
-    body.people = Number(body.people);
+    const {
+      first_name,
+      last_name,
+      mobile_number,
+      reservation_date,
+      reservation_time,
+      people,
+    } = formData;
 
-    if (isValidForm(body)) {
+    let postBody = {
+      first_name,
+      last_name,
+      mobile_number,
+      reservation_date,
+      reservation_time,
+      people: Number(people),
+    };
+
+    if (isValidForm(postBody)) {
       const abortController = new AbortController();
-      addReservation(body, abortController.signal)
-        .then(() => history.push(`/dashboard?date=${body.reservation_date}`))
-        .catch(setReservationsError);
+
+      if (isEdit) {
+        const updateBody = {
+          ...postBody,
+          reservation_id,
+        };
+
+        updateReservation(updateBody, abortController.signal)
+          //.then(() => history.goBack())
+          .then(() => history.push(`/dashboard?date=${reservation_date}`))
+          .catch(setReservationsError);
+
+        //history.goBack()
+      } else {
+        addReservation(postBody, abortController.signal)
+          .then(() => history.push(`/dashboard?date=${reservation_date}`))
+          .catch(setReservationsError);
+      }
 
       return false;
     }
@@ -84,7 +135,7 @@ const NewReservation = () => {
   } = formData;
 
   return (
-    <form>
+    <section>
       <ErrorAlert error={reservationsError} />
       <input
         required
@@ -150,9 +201,9 @@ const NewReservation = () => {
       <button type="submit" onClick={handleSubmit}>
         Submit
       </button>
-      <button onClick={() => history.goBack()}>Cancel</button>
-    </form>
+      <button onClick={history.goBack}>Cancel</button>
+    </section>
   );
 };
 
-export default NewReservation;
+export default ReservationForm;

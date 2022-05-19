@@ -12,6 +12,27 @@ const SeatReservation = () => {
   const { reservation_id } = useParams();
   const history = useHistory();
 
+  useEffect(() => {
+    const loadData = () => {
+      const abortController = new AbortController();
+      setReservationsError(null);
+      readReservation(reservation_id, abortController.signal)
+        .then(setReservation)
+        .catch(setReservationsError);
+
+      listTables(abortController.signal)
+        .then((tables) => {
+          setTableSelection(tables[0]["table_id"]);
+          return tables;
+        })
+        .then(setTables)
+        .catch(setReservationsError);
+
+      return () => abortController.abort();
+    };
+
+    loadData();
+  }, [reservation_id]);
   const handleSubmit = (e) => {
     e.preventDefault();
     setReservationsError(null);
@@ -28,13 +49,10 @@ const SeatReservation = () => {
     }
 
     const data = { table_id, reservation_id: Number(reservation_id) };
-    const updatedBody = { status: "seated"}
     const abortController = new AbortController();
     seatReservation(data, abortController.signal)
       .then(() => history.push("/dashboard"))
       .catch(setReservationsError);
-
-    
 
     return () => abortController.abort();
   };
@@ -44,25 +62,6 @@ const SeatReservation = () => {
     setTableSelection(e.target.value);
   };
 
-  useEffect(loadData, []);
-
-  function loadData() {
-    const abortController = new AbortController();
-    setReservationsError(null);
-    readReservation(reservation_id, abortController.signal)
-      .then(setReservation)
-      .catch(setReservationsError);
-
-    listTables(abortController.signal)
-      .then((tables) => {
-        setTableSelection(tables[0]["table_id"]);
-        return tables;
-      })
-      .then(setTables)
-      .catch(setReservationsError);
-
-    return () => abortController.abort();
-  }
   return (
     <form>
       <ErrorAlert error={reservationsError} />
@@ -75,7 +74,9 @@ const SeatReservation = () => {
           </option>
         ))}
       </select>
-      <button type="submit" onClick={handleSubmit}>Submit</button>
+      <button type="submit" onClick={handleSubmit}>
+        Submit
+      </button>
       <button onClick={() => history.goBack()}>Cancel</button>
     </form>
   );

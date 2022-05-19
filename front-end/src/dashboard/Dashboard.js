@@ -4,6 +4,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { next, previous, today } from "../utils/date-time";
 import ReservationsList from "../reservations/ReservationsList";
 import TablesList from "../tables/TablesList";
+import { useHistory } from "react-router";
 
 /**
  * Defines the dashboard page.
@@ -22,6 +23,20 @@ function Dashboard() {
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([])
   const [reservationsError, setReservationsError] = useState(null);
+  const history = useHistory()
+
+  useEffect(() => {
+    const updateUrlWithQuery = () => {
+
+      const abortController = new AbortController();
+      history.push(`/dashboard?date=${date}`)
+      return () => abortController.abort();
+
+    }
+
+    updateUrlWithQuery()
+    
+  }, [date])
 
   const handleDays = (e) => {
     e.preventDefault();
@@ -63,7 +78,7 @@ function Dashboard() {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      <ReservationsList reservations={reservations} />
+      <ReservationsList reservations={reservations} refresh={loadDashboard} />
       <TablesList tables={tables} loadDashboard={loadDashboard} />
       {/* {JSON.stringify(reservations)} */}
 

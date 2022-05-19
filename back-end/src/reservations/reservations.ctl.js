@@ -3,16 +3,21 @@ const hasProperties = require("../errors/hasProperties");
 const resSvc = require("./reservations.svc");
 
 const validateQuery = (req, res, next) => {
-  const { date } = req.query;
+  const { date, mobile_number } = req.query;
 
   if (date) {
     res.locals.date = date;
     return next();
   }
 
+  if(mobile_number){
+    res.locals.mobile_number = mobile_number
+    return next();
+  }
+ 
   next({
     status: 400,
-    message: "Missing date URL Parameter.",
+    message: "Missing Parameter",
   });
 };
 
@@ -44,14 +49,13 @@ const validateReservationExists = async (req, res, next) => {
   });
 };
 
-const validateReservationStatus = async (req,res,next) => {
-  const {status} = res.locals.reservation
+const validateReservationStatus = async (req, res, next) => {
+  const { status } = res.locals.reservation;
 
-  if(status === "finished") return next({status: 400, message: "finished"})
+  if (status === "finished") return next({ status: 400, message: "finished" });
 
-  next()
-
-}
+  next();
+};
 
 const validateBody = (req, res, next) => {
   const body = req.body.data;
@@ -95,9 +99,8 @@ const validateBody = (req, res, next) => {
       if (reservation_time > "21:30")
         return next({ status: 400, message: "closed" });
 
-
       if (/(seated|finished)/.test(status))
-        return next({status: 400, message: `${status}`})
+        return next({ status: 400, message: `${status}` });
     });
 
     //at this point, we confirmed the body is valid and has values present
@@ -117,10 +120,9 @@ const validateUpdateBody = (req, res, next) => {
   if (body) {
     hasProperties(["status"], body, next, () => {
       const { status } = body;
-      if (!/^(booked|seated|finished)/.test(status))
+      if (!/^(booked|seated|finished|cancelled)/.test(status))
         return next({ status: 400, message: `${status}` });
     });
-
 
     res.locals.body = body;
     return next();
@@ -135,14 +137,23 @@ const validateUpdateBody = (req, res, next) => {
 async function list(req, res) {
   console.log("GET", req.url, req.query);
 
-  const date = res.locals.date;
-  let data = await resSvc.list(date);
-  data  = data.filter( ({status}) => status !== "finished")
+  const date = res.locals.date
+  const mobile_number = res.locals.mobile_number
 
+  if(date){
+    let data = await resSvc.list(date);
+    data = data.filter(({ status }) => status !== "finished");
+  
+    res.json({
+      data,
+    });
+  }
 
-  res.json({
-    data,
-  });
+  if(mobile_number){
+    const data = await resSvc.search(mobile_number)
+    res.json({data})
+  }
+
 }
 
 const create = async (req, res) => {
@@ -167,11 +178,10 @@ const update = async (req, res) => {
   const reservation_id = res.locals.reservation_id;
   const updateBody = res.locals.body;
 
-  const data = await resSvc.update(reservation_id, updateBody)
+  const data = await resSvc.update(reservation_id, updateBody);
 
-  res.json({data});
+  res.json({ data });
 };
-
 
 module.exports = {
   validateReservationExists,
@@ -184,7 +194,13 @@ module.exports = {
   ],
   update: [
     validateReservationId,
-    validateUpdateBody,
+    (req,res,next) => {
+      if(req.url.includes("status")){
+        return validateUpdateBody(req,res,next)
+      }else{
+        return validateBody(req,res,next)
+      }
+    },
     asyncErrorBoundary(validateReservationExists),
     validateReservationStatus,
     asyncErrorBoundary(update),
