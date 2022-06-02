@@ -1,0 +1,33 @@
+#logo_text {
+  font-family: "Alfa Slab One", "cursive";
+  font-size: clamp(3rem, -0.875rem + 1.3vw, 1rem);
+}
+
+#accordionSidebar {
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+
+.side-bar{
+  box-shadow: 0px 3px 3px 0px #4A051C;
+
+}
+
+@media only screen and (min-width: 480px) {
+  #logo_text {
+    font-size: clamp(1.3rem, 1.4vw, 1.5rem);
+  }
+
+  #accordionSidebar {
+    flex-direction: column;
+    justify-content: center;
+    width: auto;
+  }
+
+  .side-bar{
+    box-shadow: 3px 0px 3px 0px #4A051C;
+  
+  }
+}

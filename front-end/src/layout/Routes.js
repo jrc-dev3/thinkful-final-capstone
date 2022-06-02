@@ -17,32 +17,36 @@ import ReservationForm from "../reservations/ReservationForm";
  */
 function Routes() {
   return (
-    <Switch>
-      <Route exact={true} path="/">
-        <Redirect to={'/dashboard'} />
-      </Route>
-      <Route exact={true} path="/reservations/:reservation_id/seat">
-        <SeatReservation />
-      </Route>
-      <Route exact={true} path="/reservations/:reservation_id/edit">
-        <ReservationForm />
-      </Route>
-      <Route exact={true} path="/reservations/new">
-        <ReservationForm />
-      </Route>
-      <Route exact={true} path="/tables/new">
-        <NewTable />
-      </Route>
-      <Route path="/dashboard">
-        <Dashboard />
-      </Route>
-      <Route path="/search">
-        <Search />
-      </Route>
-      <Route>
-        <NotFound />
-      </Route>
-    </Switch>
+
+    <main className="container-fluid overflow-auto">
+      <Switch>
+        <Route exact={true} path="/">
+          <Redirect to={'/dashboard'} />
+        </Route>
+        <Route exact={true} path="/reservations/:reservation_id/seat">
+          <SeatReservation />
+        </Route>
+        <Route exact={true} path="/reservations/:reservation_id/edit">
+          <ReservationForm />
+        </Route>
+        <Route exact={true} path="/reservations/new">
+          <ReservationForm />
+        </Route>
+        <Route exact={true} path="/tables/new">
+          <NewTable />
+        </Route>
+        <Route path="/dashboard">
+          <Dashboard />
+        </Route>
+        <Route path="/search">
+          <Search />
+        </Route>
+        <Route>
+          <NotFound />
+        </Route>
+      </Switch>
+    </main>
+
   );
 }
 

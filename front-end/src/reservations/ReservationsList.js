@@ -21,7 +21,7 @@ const ReservationsList = ({ reservations, refresh }) => {
   if (typeof reservations === "string") return <h2>{reservations}</h2>;
 
   return (
-    <section>
+    <section className="container">
       {reservations.map(
         ({
           reservation_id,
@@ -33,37 +33,45 @@ const ReservationsList = ({ reservations, refresh }) => {
           reservation_time,
           status,
         }) => (
-          <article key={reservation_id} style={{ border: "solid" }}>
-            <p>{first_name}</p>
-            <p>{last_name}</p>
-            <p>{mobile_number}</p>
-            <p>{reservation_date}</p>
-            <p>{reservation_time}</p>
-            <p>{people}</p>
-            <p data-reservation-id-status={reservation_id}>{status}</p>
-            {status === "booked" && (
-              <>
-                <Link
-                  href={`/reservations/${reservation_id}/seat`}
-                  to={`/reservations/${reservation_id}/seat`}
-                >
-                  <button>Seat</button>
-                </Link>
-                <Link
-                  href={`/reservations/${reservation_id}/edit`}
-                  to={`/reservations/${reservation_id}/edit`}
-                >
-                  <button>Edit</button>
-                </Link>
-                <button
-                  onClick={handleCancellation}
-                  data-reservation-id-cancel={reservation_id}
-                >
-                  Cancel
-                </button>
-              </>
-            )}
-          </article>
+          <section key={reservation_id} className="card p-3 my-3 shadow">
+            <article className="card-body">
+              <p className="card-text"><b>First Name:</b> {first_name}</p>
+              <p className="card-text"><b>Last Name:</b> {last_name}</p>
+              <p className="card-text"><b>Mobile:</b> {mobile_number}</p>
+              <p className="card-text"><b>Date:</b> {reservation_date}</p>
+              <p className="card-text"><b>Time:</b> {reservation_time}</p>
+              <p className="card-text"><b>People:</b> {people}</p>
+              <p
+                className="card-text"
+                data-reservation-id-status={reservation_id}
+              >
+                <b>Status:</b> {status}
+              </p>
+              {status === "booked" && (
+                <div className="w-100 d-inline-flex justify-content-end" >
+                  <button
+                    className="btn btn-danger ml-2"
+                    onClick={handleCancellation}
+                    data-reservation-id-cancel={reservation_id}
+                  >
+                    Cancel
+                  </button>
+                  <Link
+                    href={`/reservations/${reservation_id}/edit`}
+                    to={`/reservations/${reservation_id}/edit`}
+                  >
+                    <button className="btn btn-warning ml-2">Edit</button>
+                  </Link>
+                  <Link
+                    href={`/reservations/${reservation_id}/seat`}
+                    to={`/reservations/${reservation_id}/seat`}
+                  >
+                    <button className="btn btn-success ml-2">Seat</button>
+                  </Link>
+                </div>
+              )}
+            </article>
+          </section>
         )
       )}
     </section>

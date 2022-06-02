@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
-import {  addTable } from "../utils/api";
+import { addTable } from "../utils/api";
 
 const NewTables = () => {
   const initialForm = {
@@ -58,29 +58,51 @@ const NewTables = () => {
   const { table_name, capacity } = formData;
 
   return (
-    <form>
+    <form className="container p-3 d-flex flex-column">
       <ErrorAlert error={reservationsError} />
-      <input
-        required
-        placeholder="John"
-        value={table_name}
-        name="table_name"
-        type="text"
-        onChange={handleOnChange}
-      />
-      <input
-        required
-        placeholder="1"
-        value={capacity}
-        name="capacity"
-        type="number"
-        onChange={handleOnChange}
-      />
+      <div className="form-group">
+        <label htmlFor="table_name">Table Name: </label>
+        <input
+          className="form-control"
+          required
+          placeholder="Roof #1"
+          value={table_name}
+          name="table_name"
+          type="text"
+          onChange={handleOnChange}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="capacity">Capacity: </label>
+        <input
+          className="form-control"
+          required
+          placeholder="1"
+          value={capacity}
+          name="capacity"
+          type="number"
+          onChange={handleOnChange}
+        />
+      </div>
 
-      <button type="submit" onClick={handleSubmit}>
-        Submit
-      </button>
-      <button onClick={() => history.goBack()}>Cancel</button>
+      <div className="d-flex justify-content-end">
+        <button
+          className="btn btn-danger ml-2"
+          onClick={(e) => {
+            e.preventDefault();
+            history.goBack();
+          }}
+        >
+          Cancel
+        </button>
+        <button
+          className="btn btn-success ml-2"
+          type="submit"
+          onClick={handleSubmit}
+        >
+          Submit
+        </button>
+      </div>
     </form>
   );
 };

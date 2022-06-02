@@ -1,4 +1,41 @@
+html {
+  /* font-size: 16px; */
+  font-family: 'Source Serif Pro', serif;
+  color: white;
+}
+
+html,
+body,
+#root,
+.container-fluid {
+  height: 100vh;
+
+}
+
 .side-bar {
-  background-color: #393a44;
+  /* background-color: #393a44; */
+  background-color: #4A051C;
   min-width: 200px;
+}
+
+.main-content{
+  background-color: #23967F;
+  color: white;
+}
+
+.card {
+  background-color: #8A89C0;
+  color: white
+}
+
+.btn{
+  background-color: #4A051C;
+  border-color: white;
+  color: white
+}
+
+.ds-header{
+  font-size: "200%";
+  font-family: "Alfa Slab One", "cursive";
+
 }

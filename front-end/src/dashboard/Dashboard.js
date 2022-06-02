@@ -72,20 +72,27 @@ function Dashboard() {
   }
 
   return (
-    <main>
-      <h1>Dashboard</h1>
+    <section className="container d-flex p-4 flex-column align-items-center">
+      {/* <h1>Dashboard</h1> */}
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h2 className="mb-0 ds-header">Reservations:</h2>
       </div>
       <ErrorAlert error={reservationsError} />
       <ReservationsList reservations={reservations} refresh={loadDashboard} />
-      <TablesList tables={tables} loadDashboard={loadDashboard} />
-      {/* {JSON.stringify(reservations)} */}
 
-      <button onClick={handleDays}>Next</button>
-      <button onClick={handleDays}>Previous</button>
-      <button onClick={handleDays}>Today</button>
-    </main>
+      <div className="d-md-flex mb-3">
+        <h2 className="mb-0 ds-header">Tables:</h2>
+      </div>
+      <TablesList tables={tables} loadDashboard={loadDashboard} />
+
+      <div className="w-100 d-inline-flex justify-content-center">
+        <button className="btn btn-primary ml-2" onClick={handleDays}>Previous</button>
+        <button className="btn btn-outline-secondary ml-2" onClick={handleDays}>Today</button>
+        <button className="btn btn-primary ml-2" onClick={handleDays}>Next</button>
+      </div>
+
+
+    </section>
   );
 }
 

@@ -31,20 +31,24 @@ const Search = () => {
   };
 
   return (
-    <form>
+    <form className="container p-3 d-flex flex-column">
       <ErrorAlert error={reservationsError} />
-      <label htmlFor="mobile_number">Mobile Number: </label>
-      <input
-        required
-        placeholder="555-555-1234 "
-        value={mobile_number}
-        name="mobile_number"
-        type="text"
-        //pattern="^[0-9]{3}-[0-9]{3}-[0-9]{4}$"
-        onChange={handleOnChange}
-      />
+      <div className="form-group">
+        <label htmlFor="mobile_number">Mobile Number: </label>
+        <input
+          className="form-control"
+          required
+          placeholder="555-555-1234 "
+          value={mobile_number}
+          name="mobile_number"
+          type="text"
+          //pattern="^[0-9]{3}-[0-9]{3}-[0-9]{4}$"
+          onChange={handleOnChange}
+        />
+      </div>
 
-      <button type="submit" onClick={handleSubmit}>
+
+      <button className="btn btn-primary" type="submit" onClick={handleSubmit}>
         Find
       </button>
 
