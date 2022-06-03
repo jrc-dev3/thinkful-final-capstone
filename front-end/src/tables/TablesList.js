@@ -29,7 +29,7 @@ const TablesList = ({ tables, loadDashboard }) => {
             <p className="card-text"><b>Table Name:</b> {table_name}</p>
             <p className="card-text"><b>Capacity:</b> {capacity}</p>
             <p className="card-text" data-table-id-status={table_id}>
-              <b>Status:</b> {reservation_id ? "OCCUPIED" : "FREE"}
+              <b>Status:</b> {reservation_id ? "occupied" : "free"}
             </p>
             {reservation_id && (
               <span className="d-flex justify-content-end">

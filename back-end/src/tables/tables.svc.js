@@ -35,10 +35,6 @@ const update = (table_id, updateBody) => {
         .then(trx.commit)
         .catch(trx.rollback);
     })
-  // return knex(TABLE)
-  //         .select("reservation_id")
-  //         .where({table_id})
-  //         .update(updateBody, "reservation_id")
 };
 
 const destroy = (table_id, reservation_id) => {
